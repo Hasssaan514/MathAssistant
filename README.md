@@ -2,6 +2,7 @@
 
 An intelligent math tutoring system that combines multiple AI agents to solve mathematical problems step-by-step. This project features both research capabilities and advanced mathematical problem-solving with visual equation recognition.
 
+## ✨ LIVE DEMO: [Try the app here](https://mathassistant-mvygxunkngsoih4nburiju.streamlit.app/)
 ## ✨ Features
 
 ### 🔍 Research Assistant (`appinterface.py`)
