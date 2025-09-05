@@ -21,6 +21,7 @@ import plotly.express as px
 # Load environment variables
 load_dotenv()
 
+
 # ----------------- STEP 1: Equation Cleaner -----------------
 def clean_equation(equation: str) -> str:
     """Convert messy copied equations into LaTeX + Sympy-friendly input"""
@@ -32,6 +33,7 @@ def clean_equation(equation: str) -> str:
     equation = equation.replace("cot", "cos/sin")
     equation = equation.replace("²", "**2")
     return equation.strip()
+
 
 # ----------------- TOOL: Sympy Solver -----------------
 @tool
@@ -54,11 +56,13 @@ def solve_equation(equation: str) -> str:
     except Exception as e:
         return f"Error solving equation: {str(e)}"
 
+
 # ----------------- Structured Response -----------------
 class MathResponse(BaseModel):
     problem: str
     solution_steps: str
     final_answer: str
+
 
 # Initialize LLM
 llm = ChatGoogleGenerativeAI(
@@ -95,6 +99,7 @@ agent = create_tool_calling_agent(
 )
 agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
 
+
 # ----------------- PDF Export -----------------
 def save_solution_as_pdf(problem, steps, final_answer, filename="solution.pdf"):
     c = canvas.Canvas(filename, pagesize=letter)
@@ -122,6 +127,7 @@ def save_solution_as_pdf(problem, steps, final_answer, filename="solution.pdf"):
     c.showPage()
     c.save()
     return filename
+
 
 # ---------------- INTERACTIVE GRAPHING ----------------
 def plot_function_with_roots(expr, sol, x_range=(-10, 10)):
@@ -154,13 +160,14 @@ def plot_function_with_roots(expr, sol, x_range=(-10, 10)):
     if real_roots:
         fig.add_scatter(
             x=real_roots,
-            y=[0]*len(real_roots),
+            y=[0] * len(real_roots),
             mode="markers",
             marker=dict(color="red", size=10),
             name="Roots"
         )
 
     st.plotly_chart(fig, use_container_width=True)
+
 
 # ---------------- STREAMLIT APP ----------------
 st.set_page_config(page_title="Math Assistant Chatbot", page_icon="🧮")
@@ -171,10 +178,12 @@ st.write("Type your math problem OR upload a screenshot, and I’ll solve step b
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+
 def encode_image_to_base64(image: Image.Image) -> str:
     buffered = BytesIO()
     image.save(buffered, format="PNG")
     return base64.b64encode(buffered.getvalue()).decode("utf-8")
+
 
 uploaded_file = st.file_uploader("📸 Upload a screenshot of your math problem", type=["png", "jpg", "jpeg"])
 query = None
